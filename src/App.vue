@@ -7,11 +7,11 @@ import ItemSection from './components/ItemSection.vue'
 import SummaryBar from './components/SummaryBar.vue'
 import AdvisorPanel from './components/AdvisorPanel.vue'
 import { exportToPDF } from './lib/export'
-import { initAuth, isLoggedIn, authToken } from './composables/useAuth'
+import { initAuth, isLoggedIn } from './composables/useAuth'
 import { applyRemoteData } from './composables/useBudget'
 import type { BudgetData } from './composables/useBudget'
+import { getStorage } from './lib/storage'
 
-const API_URL = import.meta.env.VITE_API_URL ?? ''
 const mainRef = ref<HTMLElement | null>(null)
 
 async function handleExport() {
@@ -26,18 +26,9 @@ onMounted(async () => {
   await initAuth()
 
   if (isLoggedIn.value) {
-    try {
-      const resp = await fetch(`${API_URL}/api/v1/budget`, {
-        headers: { Authorization: `Bearer ${authToken.value}` },
-      })
-      if (resp.ok) {
-        const remote: BudgetData = await resp.json()
-        if (remote && Object.keys(remote).length > 0) {
-          applyRemoteData(remote)
-        }
-      }
-    } catch {
-      // Offline — local data already loaded
+    const remote = await getStorage<BudgetData | null>(null)
+    if (remote && Object.keys(remote).length > 0) {
+      applyRemoteData(remote)
     }
   }
 })

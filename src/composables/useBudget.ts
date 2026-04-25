@@ -28,10 +28,16 @@ const DEFAULT_DATA: BudgetData = {
 
 const data = reactive<BudgetData>(getItem<BudgetData>('budget_data', DEFAULT_DATA))
 
-watch(data, (val) => queueSync(val), { deep: true })
+let applyingRemote = false
+
+watch(data, (val) => {
+  if (!applyingRemote) queueSync(val)
+}, { deep: true })
 
 export function applyRemoteData(remote: BudgetData) {
+  applyingRemote = true
   Object.assign(data, remote)
+  applyingRemote = false
 }
 
 const monthlyNet = computed(() => data.salary.netAnnuel / 12)

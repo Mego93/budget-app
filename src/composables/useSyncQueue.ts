@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import { getItem, setItem, setStorageLocal } from '../lib/storage'
+import { getItem, setStorageLocal } from '../lib/storage'
+import { logout } from './useAuth'
 
-const TOKEN_KEY = 'budget_token'
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
 export const syncStatus = ref<'idle' | 'syncing' | 'error'>('idle')
@@ -9,7 +9,7 @@ export const syncStatus = ref<'idle' | 'syncing' | 'error'>('idle')
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 function getToken(): string {
-  return getItem<string>(TOKEN_KEY, '')
+  return getItem<string>('budget_token', '')
 }
 
 async function pushToAPI(data: unknown, attempt = 1): Promise<void> {
@@ -29,7 +29,7 @@ async function pushToAPI(data: unknown, attempt = 1): Promise<void> {
     if (resp.ok) {
       syncStatus.value = 'idle'
     } else if (resp.status === 401) {
-      setItem(TOKEN_KEY, '')
+      logout()
       syncStatus.value = 'idle'
     } else {
       throw new Error(`HTTP ${resp.status}`)

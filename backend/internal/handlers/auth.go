@@ -22,17 +22,18 @@ type AuthHandler struct {
 	oauthCfg    *oauth2.Config
 	jwtSecret   string
 	frontendURL string
+	prod        bool
 }
 
-func NewAuthHandler(pool *pgxpool.Pool, clientID, clientSecret, jwtSecret, frontendURL string) *AuthHandler {
+func NewAuthHandler(pool *pgxpool.Pool, clientID, clientSecret, jwtSecret, frontendURL string, prod bool) *AuthHandler {
 	return &AuthHandler{
 		pool:        pool,
 		jwtSecret:   jwtSecret,
 		frontendURL: frontendURL,
+		prod:        prod,
 		oauthCfg: &oauth2.Config{
 			ClientID:     clientID,
 			ClientSecret: clientSecret,
-			RedirectURL:  "", // set dynamically from request
 			Scopes:       []string{"openid", "email", "profile"},
 			Endpoint:     google.Endpoint,
 		},
@@ -48,8 +49,8 @@ func (h *AuthHandler) Redirect(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 		MaxAge:   600,
 		HttpOnly: true,
-		Secure:   r.TLS != nil,
-		SameSite: http.SameSiteLaxMode,
+		Secure:   h.prod,
+		SameSite: http.SameSiteStrictMode,
 	})
 	http.Redirect(w, r, cfg.AuthCodeURL(state), http.StatusTemporaryRedirect)
 }
@@ -63,14 +64,14 @@ func (h *AuthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{Name: "oauth_state", MaxAge: -1, Path: "/"})
 
 	cfg := h.configWithRedirect(r)
-	token, err := cfg.Exchange(r.Context(), r.URL.Query().Get("code"))
+	oauthToken, err := cfg.Exchange(r.Context(), r.URL.Query().Get("code"))
 	if err != nil {
 		slog.Error("oauth exchange failed", "err", err)
 		http.Error(w, "auth failed", http.StatusInternalServerError)
 		return
 	}
 
-	profile, err := fetchGoogleProfile(r.Context(), cfg, token)
+	profile, err := fetchGoogleProfile(r.Context(), cfg, oauthToken)
 	if err != nil {
 		slog.Error("fetch profile failed", "err", err)
 		http.Error(w, "auth failed", http.StatusInternalServerError)
@@ -90,7 +91,27 @@ func (h *AuthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, h.frontendURL+"#token="+jwt, http.StatusTemporaryRedirect)
+	// Deliver JWT via a short-lived one-time code in the query string
+	// to avoid exposing the token in browser history or Referer headers.
+	code := auth.StoreCode(jwt)
+	http.Redirect(w, r, h.frontendURL+"?auth_code="+code, http.StatusTemporaryRedirect)
+}
+
+func (h *AuthHandler) Exchange(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Code string `json:"code"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Code == "" {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	jwt, ok := auth.ConsumeCode(body.Code)
+	if !ok {
+		http.Error(w, "invalid or expired code", http.StatusUnauthorized)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"token": jwt})
 }
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {

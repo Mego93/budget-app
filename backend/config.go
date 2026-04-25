@@ -12,18 +12,19 @@ type config struct {
 	GoogleClientSecret string
 	JWTSecret          string
 	FrontendURL        string
+	Prod               bool
 }
 
 func mustConfig() config {
-	cfg := config{
+	return config{
 		Port:               getEnv("PORT", "8080"),
 		DatabaseURL:        requireEnv("DATABASE_URL"),
 		GoogleClientID:     requireEnv("GOOGLE_CLIENT_ID"),
 		GoogleClientSecret: requireEnv("GOOGLE_CLIENT_SECRET"),
 		JWTSecret:          requireEnv("JWT_SECRET"),
 		FrontendURL:        getEnv("FRONTEND_URL", "http://localhost:5173"),
+		Prod:               os.Getenv("ENVIRONMENT") == "production",
 	}
-	return cfg
 }
 
 func requireEnv(key string) string {

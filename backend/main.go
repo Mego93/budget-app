@@ -43,9 +43,10 @@ func main() {
 		w.Write([]byte("ok"))
 	})
 
-	authHandler := handlers.NewAuthHandler(pool, cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.JWTSecret, cfg.FrontendURL)
+	authHandler := handlers.NewAuthHandler(pool, cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.JWTSecret, cfg.FrontendURL, cfg.Prod)
 	r.Get("/auth/google", authHandler.Redirect)
 	r.Get("/auth/google/callback", authHandler.Callback)
+	r.Post("/auth/exchange", authHandler.Exchange)
 	r.Post("/auth/logout", authHandler.Logout)
 
 	budgetHandler := handlers.NewBudgetHandler(pool)
