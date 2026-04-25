@@ -1,5 +1,6 @@
 import { reactive, computed, watch } from 'vue'
-import { getStorage, setStorage } from '../lib/storage'
+import { getItem } from '../lib/storage'
+import { queueSync } from './useSyncQueue'
 
 export interface Row {
   id: string
@@ -25,9 +26,13 @@ const DEFAULT_DATA: BudgetData = {
   ],
 }
 
-const data = reactive<BudgetData>(getStorage<BudgetData>(DEFAULT_DATA))
+const data = reactive<BudgetData>(getItem<BudgetData>('budget_data', DEFAULT_DATA))
 
-watch(data, (val) => setStorage(val), { deep: true })
+watch(data, (val) => queueSync(val), { deep: true })
+
+export function applyRemoteData(remote: BudgetData) {
+  Object.assign(data, remote)
+}
 
 const monthlyNet = computed(() => data.salary.netAnnuel / 12)
 const monthlyBrut = computed(() => data.salary.brutAnnuel / 12)
