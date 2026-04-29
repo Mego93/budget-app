@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useBudget } from '../composables/useBudget'
+import { useBudget, CHARGES_RATE, TAX_YEAR } from '../composables/useBudget'
 
 const { data, netAnnuel, monthlyNet, monthlyBrut, monthlyImpot, impotAnnuel, effectiveMonthlyNet } = useBudget()
 
@@ -42,7 +42,7 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
 
       <!-- Net annuel — calculé automatiquement (cotisations ~22 %) -->
       <div class="flex items-center justify-between gap-4">
-        <label class="text-sm" style="color: var(--text-muted); min-width: 0; flex: 1">Net annuel <span class="text-xs" style="color: var(--text-dim)">(charges ~22 %)</span></label>
+        <label class="text-sm" style="color: var(--text-muted); min-width: 0; flex: 1">Net annuel <span class="text-xs" style="color: var(--text-dim)">(charges ~{{ Math.round(CHARGES_RATE * 100) }} %)</span></label>
         <div class="flex items-center gap-1.5 num">
           <span class="text-right text-sm w-28 block" style="color: var(--text-dim)">
             {{ netAnnuel > 0 ? netAnnuel.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) : '—' }}
@@ -100,7 +100,7 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
       style="border-top: 1px solid var(--border-subtle)"
     >
       <div class="flex items-center justify-between">
-        <p class="text-xs" style="color: var(--text-dim)">Impôt annuel estimé <span style="color: var(--text-muted)">(barème 2024)</span></p>
+        <p class="text-xs" style="color: var(--text-dim)">Impôt annuel estimé <span style="color: var(--text-muted)">(barème {{ TAX_YEAR }})</span></p>
         <span class="text-xs num" style="color: var(--text-dim)">{{ fmt(impotAnnuel) }}</span>
       </div>
       <div class="flex items-center justify-between">

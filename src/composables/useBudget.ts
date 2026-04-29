@@ -31,7 +31,15 @@ const DEFAULT_DATA: BudgetData = {
 }
 
 // Cotisations salariales moyennes ~22 % (hors prélèvement à la source)
-const CHARGES_RATE = 0.22
+export const CHARGES_RATE = 0.22
+
+// Barème de l'impôt sur le revenu — année de référence
+export const TAX_YEAR = 2024
+
+// Abattement forfaitaire 10 % pour frais professionnels
+const ABATTEMENT_RATE = 0.10
+const ABATTEMENT_MIN = 495
+const ABATTEMENT_MAX = 14_171
 
 // Tranches de l'impôt sur le revenu 2024 (barème sur le revenu net imposable)
 const TAX_BRACKETS: { min: number; max: number; rate: number }[] = [
@@ -43,8 +51,7 @@ const TAX_BRACKETS: { min: number; max: number; rate: number }[] = [
 ]
 
 function calcImpot(netAnnuel: number): number {
-  // Abattement de 10 % pour frais professionnels (min 495 €, max 14 171 €)
-  const abattement = Math.min(Math.max(netAnnuel * 0.10, 495), 14_171)
+  const abattement = Math.min(Math.max(netAnnuel * ABATTEMENT_RATE, ABATTEMENT_MIN), ABATTEMENT_MAX)
   const revenu = Math.max(0, netAnnuel - abattement)
   let impot = 0
   for (const { min, max, rate } of TAX_BRACKETS) {
