@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { getItem, setItem } from '../lib/storage'
 import type { BudgetData } from './useBudget'
+import { CHARGES_RATE } from './useBudget'
 
 const API_KEY_STORAGE = 'budget_anthropic_key'
 
@@ -50,7 +51,7 @@ function buildSummary(data: BudgetData, monthlyNet: number, totalDepenses: numbe
   return `Budget mensuel — ${new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
 
 Salaire brut annuel : ${fmt(data.salary.brutAnnuel)} € (${fmt(data.salary.brutAnnuel / 12)} €/mois)
-Salaire net annuel  : ${fmt(data.salary.netAnnuel)} € (${fmt(monthlyNet)} €/mois)
+Salaire net annuel  : ${fmt(data.salary.brutAnnuel * (1 - CHARGES_RATE))} € (${fmt(monthlyNet)} €/mois)
 
 Dépenses totales : ${fmt(totalDepenses)} € ${pct(totalDepenses)}
 ${depLines}
