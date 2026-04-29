@@ -61,16 +61,25 @@ function calcImpot(netAnnuel: number): number {
   return impot
 }
 
+function asNumber(v: unknown, fallback = 0): number {
+  const n = Number(v)
+  return isFinite(n) ? n : fallback
+}
+
+function asBoolean(v: unknown, fallback: boolean): boolean {
+  return typeof v === 'boolean' ? v : fallback
+}
+
 function migrateData(raw: Record<string, unknown>): BudgetData {
   const salary = (raw.salary ?? {}) as Record<string, unknown>
   return {
     salary: {
-      brutAnnuel: (salary.brutAnnuel as number) ?? 0,
-      has13emeMois: (salary.has13emeMois as boolean) ?? false,
-      prelevementALaSource: (salary.prelevementALaSource as boolean) ?? false,
+      brutAnnuel: asNumber(salary.brutAnnuel),
+      has13emeMois: asBoolean(salary.has13emeMois, false),
+      prelevementALaSource: asBoolean(salary.prelevementALaSource, false),
     },
-    depenses: (raw.depenses as Row[]) ?? DEFAULT_DATA.depenses,
-    epargne: (raw.epargne as Row[]) ?? DEFAULT_DATA.epargne,
+    depenses: Array.isArray(raw.depenses) ? raw.depenses as Row[] : DEFAULT_DATA.depenses,
+    epargne: Array.isArray(raw.epargne) ? raw.epargne as Row[] : DEFAULT_DATA.epargne,
   }
 }
 
@@ -85,10 +94,13 @@ watch(data, (val) => {
   if (!applyingRemote) queueSync(val)
 }, { deep: true })
 
-export function applyRemoteData(remote: BudgetData) {
+export function applyRemoteData(remote: unknown) {
   applyingRemote = true
-  Object.assign(data, migrateData(remote as unknown as Record<string, unknown>))
-  applyingRemote = false
+  try {
+    Object.assign(data, migrateData(remote as Record<string, unknown>))
+  } finally {
+    applyingRemote = false
+  }
 }
 
 // Net annuel calculé automatiquement depuis le brut (cotisations salariales ~22 %)
@@ -102,7 +114,7 @@ const monthDivisor = computed(() => data.salary.has13emeMois ? 13 : 12)
 
 const monthlyNet = computed(() => netAnnuel.value / monthDivisor.value)
 const monthlyBrut = computed(() => data.salary.brutAnnuel / monthDivisor.value)
-const monthlyImpot = computed(() => impotAnnuel.value / 12)
+const monthlyImpot = computed(() => impotAnnuel.value / monthDivisor.value)
 
 // Net mensuel effectif pris en compte dans le budget
 const effectiveMonthlyNet = computed(() =>

@@ -54,13 +54,13 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
       <!-- Toggles -->
       <div class="pt-1 space-y-2">
         <!-- 13ème mois -->
-        <label class="flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center justify-between gap-4 cursor-pointer" @click="data.salary.has13emeMois = !data.salary.has13emeMois">
           <span class="text-sm" style="color: var(--text-muted)">13ème mois</span>
           <button
             type="button"
             role="switch"
             :aria-checked="data.salary.has13emeMois"
-            @click="data.salary.has13emeMois = !data.salary.has13emeMois"
+            aria-label="13ème mois"
             class="relative inline-flex h-5 w-9 flex-shrink-0 rounded-full transition-colors duration-200"
             :style="{ background: data.salary.has13emeMois ? 'var(--green)' : 'var(--border)' }"
           >
@@ -70,16 +70,16 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
               :style="{ transform: data.salary.has13emeMois ? 'translateX(16px)' : 'translateX(0)' }"
             />
           </button>
-        </label>
+        </div>
 
         <!-- Prélèvement à la source -->
-        <label class="flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center justify-between gap-4 cursor-pointer" @click="data.salary.prelevementALaSource = !data.salary.prelevementALaSource">
           <span class="text-sm" style="color: var(--text-muted)">Prélèvement à la source</span>
           <button
             type="button"
             role="switch"
             :aria-checked="data.salary.prelevementALaSource"
-            @click="data.salary.prelevementALaSource = !data.salary.prelevementALaSource"
+            aria-label="Prélèvement à la source"
             class="relative inline-flex h-5 w-9 flex-shrink-0 rounded-full transition-colors duration-200"
             :style="{ background: data.salary.prelevementALaSource ? 'var(--green)' : 'var(--border)' }"
           >
@@ -89,7 +89,7 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
               :style="{ transform: data.salary.prelevementALaSource ? 'translateX(16px)' : 'translateX(0)' }"
             />
           </button>
-        </label>
+        </div>
       </div>
     </div>
 
@@ -101,11 +101,11 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
     >
       <div class="flex items-center justify-between">
         <p class="text-xs" style="color: var(--text-dim)">Impôt annuel estimé <span style="color: var(--text-muted)">(barème {{ TAX_YEAR }})</span></p>
-        <span class="text-xs num" style="color: var(--text-dim)">{{ fmt(impotAnnuel) }}</span>
+        <span class="text-xs num" style="color: var(--text-dim)">{{ impotAnnuel > 0 ? fmt(impotAnnuel) : '0 €' }}</span>
       </div>
       <div class="flex items-center justify-between">
         <p class="text-xs" style="color: var(--text-dim)">Prélèvement mensuel estimé</p>
-        <span class="text-xs num" style="color: var(--text-dim)">{{ fmt(monthlyImpot) }}</span>
+        <span class="text-xs num" style="color: var(--text-dim)">{{ monthlyImpot > 0 ? fmt(monthlyImpot) : '0 €' }}</span>
       </div>
     </div>
 
