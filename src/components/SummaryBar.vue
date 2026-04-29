@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useBudget } from '../composables/useBudget'
 
-const { reste, restePercent, monthlyNet } = useBudget()
+const { reste, restePercent, effectiveMonthlyNet } = useBudget()
 
 const isPositive = computed(() => reste.value >= 0)
 const color = computed(() => isPositive.value ? 'var(--green)' : 'var(--red)')
@@ -59,8 +59,8 @@ watch(reste, (val) => animateTo(val), { immediate: true })
     >
       <div>
         <p class="text-xs font-medium tracking-[0.2em] uppercase" style="color: var(--text-muted)">Il reste</p>
-        <p v-if="monthlyNet > 0" class="text-xs mt-0.5 num" style="color: var(--text-muted)">
-          sur {{ (monthlyNet).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) }} € net
+        <p v-if="effectiveMonthlyNet > 0" class="text-xs mt-0.5 num" style="color: var(--text-muted)">
+          sur {{ (effectiveMonthlyNet).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) }} € net
         </p>
       </div>
       <p
