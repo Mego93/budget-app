@@ -42,9 +42,9 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
 
       <!-- Net annuel — calculé automatiquement (cotisations ~22 %) -->
       <div class="flex items-center justify-between gap-4">
-        <label class="text-sm" style="color: var(--text-muted); min-width: 0; flex: 1">Net annuel <span class="text-xs" style="color: var(--text-dim)">(charges ~{{ Math.round(CHARGES_RATE * 100) }} %)</span></label>
+        <label class="text-sm" style="color: var(--text-muted); min-width: 0; flex: 1">Net annuel <span class="text-xs" style="color: var(--text-muted)">(charges ~{{ Math.round(CHARGES_RATE * 100) }} %)</span></label>
         <div class="flex items-center gap-1.5 num">
-          <span class="text-right text-sm w-28 block" style="color: var(--text-dim)">
+          <span class="text-right text-sm w-28 block" style="color: var(--text-muted)">
             {{ netAnnuel > 0 ? netAnnuel.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) : '—' }}
           </span>
           <span class="text-sm" style="color: var(--text-muted)">€</span>
@@ -100,23 +100,23 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
       style="border-top: 1px solid var(--border-subtle)"
     >
       <div class="flex items-center justify-between">
-        <p class="text-xs" style="color: var(--text-dim)">Impôt annuel estimé <span style="color: var(--text-muted)">(barème {{ TAX_YEAR }})</span></p>
-        <span class="text-xs num" style="color: var(--text-dim)">{{ impotAnnuel > 0 ? fmt(impotAnnuel) : '0 €' }}</span>
+        <p class="text-xs" style="color: var(--text-muted)">Impôt annuel estimé <span style="color: var(--text-muted)">(barème {{ TAX_YEAR }})</span></p>
+        <span class="text-xs num" style="color: var(--text-muted)">{{ impotAnnuel > 0 ? fmt(impotAnnuel) : '0 €' }}</span>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-xs" style="color: var(--text-dim)">Prélèvement mensuel estimé</p>
-        <span class="text-xs num" style="color: var(--text-dim)">{{ monthlyImpot > 0 ? fmt(monthlyImpot) : '0 €' }}</span>
+        <p class="text-xs" style="color: var(--text-muted)">Prélèvement mensuel estimé</p>
+        <span class="text-xs num" style="color: var(--text-muted)">{{ monthlyImpot > 0 ? fmt(monthlyImpot) : '0 €' }}</span>
       </div>
     </div>
 
     <!-- Monthly computed -->
     <div class="mt-3 pt-3 flex items-center justify-between" style="border-top: 1px solid var(--border-subtle)">
-      <p class="text-xs" style="color: var(--text-dim)">Mensuel estimé</p>
+      <p class="text-xs" style="color: var(--text-muted)">Mensuel estimé</p>
       <div class="flex items-center gap-4">
-        <span class="text-xs num" style="color: var(--text-dim)">{{ fmt(monthlyBrut) }} brut</span>
+        <span class="text-xs num" style="color: var(--text-muted)">{{ fmt(monthlyBrut) }} brut</span>
         <span class="text-sm font-medium num" style="color: var(--text)">
           {{ fmt(data.salary.prelevementALaSource ? effectiveMonthlyNet : monthlyNet) }} net
-          <span v-if="data.salary.prelevementALaSource" class="text-xs" style="color: var(--text-dim)"> (après IR)</span>
+          <span v-if="data.salary.prelevementALaSource" class="text-xs" style="color: var(--text-muted)"> (après IR)</span>
         </span>
       </div>
     </div>
