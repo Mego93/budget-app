@@ -19,6 +19,14 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+button { cursor: pointer; }
+
+*:focus-visible {
+  outline: 1.5px solid var(--green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 html, body { height: 100%; margin: 0; }
 
 body {

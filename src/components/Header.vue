@@ -20,8 +20,7 @@ const monthLabel = computed(() => {
       <!-- Export PDF -->
       <button
         @click="onExport"
-        class="flex items-center justify-center w-9 h-9 rounded-lg transition-colors"
-        style="background: var(--surface); color: var(--text-muted)"
+        class="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-150 bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
         title="Exporter en PDF"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -33,8 +32,7 @@ const monthLabel = computed(() => {
       <!-- AI Advisor -->
       <button
         @click="openAdvisor"
-        class="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium transition-colors"
-        style="background: var(--surface); color: var(--text-muted)"
+        class="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium transition-all duration-150 bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
         title="Conseils IA"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">

@@ -15,8 +15,7 @@ import { isLoggedIn, authUser, login, logout } from '../composables/useAuth'
     <button
       v-if="!isLoggedIn"
       @click="login"
-      class="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors"
-      style="background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer"
+      class="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-all duration-150 bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] hover:bg-[var(--surface-2)] hover:border-[var(--text-muted)]"
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -30,8 +29,7 @@ import { isLoggedIn, authUser, login, logout } from '../composables/useAuth'
     <button
       v-else
       @click="logout"
-      class="px-3 py-1 rounded text-xs transition-colors"
-      style="background: transparent; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer"
+      class="px-3 py-1 rounded text-xs transition-all duration-150 bg-transparent border border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface)]"
     >
       Déconnexion
     </button>
