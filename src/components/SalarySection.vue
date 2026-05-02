@@ -122,3 +122,11 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
     </div>
   </section>
 </template>
+
+<style scoped>
+input[type="number"]:focus {
+  outline: none;
+  color: var(--text);
+  opacity: 1;
+}
+</style>

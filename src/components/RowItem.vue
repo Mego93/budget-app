@@ -49,8 +49,7 @@ function onAmountInput(e: Event) {
     <!-- Delete -->
     <button
       @click="emit('remove', row.id)"
-      class="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity w-6 h-6 flex items-center justify-center rounded shrink-0"
-      style="color: var(--text-muted)"
+      class="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all duration-150 w-6 h-6 flex items-center justify-center rounded shrink-0 text-[var(--text-muted)] hover:text-[var(--red)] hover:bg-[var(--red-glow)]"
       title="Supprimer"
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">

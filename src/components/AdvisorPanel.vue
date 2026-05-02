@@ -45,13 +45,11 @@ function handleKeydown(e: KeyboardEvent) {
         <div class="flex gap-2 justify-end">
           <button
             @click="dismissKey"
-            class="px-4 py-2 text-xs rounded-lg"
-            style="background: var(--bg); color: var(--text-muted); border: 1px solid var(--border)"
+            class="btn-surface px-4 py-2 text-xs rounded-lg transition-all duration-150"
           >Annuler</button>
           <button
             @click="saveKey"
-            class="px-4 py-2 text-xs rounded-lg font-medium"
-            style="background: var(--green); color: #000"
+            class="btn-primary px-4 py-2 text-xs rounded-lg font-medium transition-all duration-150"
           >Confirmer</button>
         </div>
       </div>
@@ -82,8 +80,7 @@ function handleKeydown(e: KeyboardEvent) {
           </div>
           <button
             @click="closeAdvisor"
-            class="w-7 h-7 flex items-center justify-center rounded-lg"
-            style="background: var(--bg); color: var(--text-muted)"
+            class="btn-surface w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-150"
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -108,8 +105,7 @@ function handleKeydown(e: KeyboardEvent) {
             </p>
             <button
               @click="analyze"
-              class="mt-1 px-5 py-2.5 rounded-lg text-xs font-medium"
-              style="background: var(--green); color: #000"
+              class="btn-primary mt-1 px-5 py-2.5 rounded-lg text-xs font-medium transition-all duration-150"
             >Analyser mon budget</button>
           </div>
 
@@ -138,8 +134,7 @@ function handleKeydown(e: KeyboardEvent) {
         <div v-if="advisorText && !advisorLoading" class="px-5 pb-5 pt-3 border-t" style="border-color: var(--border)">
           <button
             @click="analyze"
-            class="w-full py-2.5 rounded-lg text-xs font-medium"
-            style="background: var(--bg); border: 1px solid var(--border); color: var(--text-muted)"
+            class="btn-surface w-full py-2.5 rounded-lg text-xs font-medium transition-all duration-150"
           >Relancer l'analyse</button>
         </div>
       </div>
@@ -149,4 +144,29 @@ function handleKeydown(e: KeyboardEvent) {
 
 <style scoped>
 @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+.btn-surface {
+  background: var(--bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.btn-surface:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #000;
+}
+.btn-primary:hover {
+  filter: brightness(1.12);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
 </style>

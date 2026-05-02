@@ -45,8 +45,7 @@ const fmt = (n: number) =>
 
     <button
       @click="addRow(section)"
-      class="mt-3 flex items-center gap-1.5 text-xs transition-colors"
-      style="color: var(--text-dim)"
+      class="mt-3 flex items-center gap-1.5 text-xs transition-all duration-150 text-[var(--text-muted)] hover:text-[var(--text)]"
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
         <line x1="12" y1="5" x2="12" y2="19"/>
