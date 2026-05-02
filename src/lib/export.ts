@@ -4,12 +4,18 @@ export async function exportToPDF(element: HTMLElement, filename: string) {
     import('jspdf'),
   ])
 
+  const width = element.scrollWidth
+  const height = element.scrollHeight
+  const windowWidth = element.getBoundingClientRect().width
+
   const canvas = await html2canvas(element, {
     backgroundColor: '#000000',
     scale: 2,
     useCORS: true,
     logging: false,
-    windowWidth: 420,
+    width,
+    height,
+    windowWidth,
   })
 
   const imgData = canvas.toDataURL('image/png')
@@ -26,12 +32,18 @@ export async function exportToPDF(element: HTMLElement, filename: string) {
 export async function exportToPNG(element: HTMLElement, filename: string) {
   const { default: html2canvas } = await import('html2canvas')
 
+  const width = element.scrollWidth
+  const height = element.scrollHeight
+  const windowWidth = element.getBoundingClientRect().width
+
   const canvas = await html2canvas(element, {
     backgroundColor: '#000000',
     scale: 2,
     useCORS: true,
     logging: false,
-    windowWidth: 420,
+    width,
+    height,
+    windowWidth,
   })
 
   const link = document.createElement('a')
