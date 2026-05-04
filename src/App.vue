@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import Header from './components/Header.vue'
 import AuthBar from './components/AuthBar.vue'
 import SalarySection from './components/SalarySection.vue'
@@ -8,18 +8,17 @@ import SummaryBar from './components/SummaryBar.vue'
 import AdvisorPanel from './components/AdvisorPanel.vue'
 import { exportToPDF } from './lib/export'
 import { initAuth, isLoggedIn } from './composables/useAuth'
-import { applyRemoteData } from './composables/useBudget'
+import { applyRemoteData, useBudget } from './composables/useBudget'
 import type { BudgetData } from './composables/useBudget'
 import { getStorage } from './lib/storage'
 
-const mainRef = ref<HTMLElement | null>(null)
+const { data } = useBudget()
 
 async function handleExport() {
-  if (!mainRef.value) return
   const month = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
     .replace(/\s/g, '-')
     .toLowerCase()
-  await exportToPDF(mainRef.value, `budget-${month}.pdf`)
+  await exportToPDF(data, `budget-${month}.pdf`)
 }
 
 onMounted(async () => {
@@ -36,7 +35,7 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen flex justify-center" style="background: var(--bg)">
-    <div ref="mainRef" class="w-full flex flex-col" style="max-width: 420px; min-height: 100dvh">
+    <div class="w-full flex flex-col" style="max-width: 420px; min-height: 100dvh">
       <AuthBar />
       <Header :on-export="handleExport" />
       <SalarySection />
