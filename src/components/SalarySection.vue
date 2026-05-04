@@ -44,7 +44,7 @@ const brutDisplay = computed(() => data.salary.brutAnnuel || '')
       <div class="flex items-center justify-between gap-4">
         <label class="text-sm" style="color: var(--text-muted); min-width: 0; flex: 1">Net annuel <span class="text-xs" style="color: var(--text-muted)">(charges ~{{ Math.round(CHARGES_RATE * 100) }} %)</span></label>
         <div class="flex items-center gap-1.5 num">
-          <span class="text-right text-sm w-28 block" style="color: var(--text-muted)">
+          <span class="text-right text-sm w-28 block" style="color: var(--text)">
             {{ netAnnuel > 0 ? netAnnuel.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) : '—' }}
           </span>
           <span class="text-sm" style="color: var(--text-muted)">€</span>
